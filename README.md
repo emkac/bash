@@ -1,0 +1,2 @@
+# bash
+quelque script bash

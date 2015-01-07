@@ -1,0 +1,1 @@
+ls mail.log.*.gz | while read line ; do echo $line;  zcat $line | grep SPAM | wc -l ;  done    affiche le nombre de spam 

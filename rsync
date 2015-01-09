@@ -1,0 +1,12 @@
+#!/bin/bash
+PATH=/usr/local/bin:/usr/bin:/usr:/sbin:/bin
+
+date=`date "+%Y%m%d"`
+
+log_file=/srv/rsync-log/log.$date.log
+
+# Script de synchronisation des backup mails CNCE
+su - rsync -c 'rsync -avz -O /srv/backup/. /srv/backup/ rsync@192.168.31.216:/srv/backup' > $log_file 
+
+#Envoi de Mail
+(echo "Subject: CNCE rsync process completed on $(date)"; echo -e "\r\n rsync Backup Summary \r\n $(cat $log_file)";) | /usr/sbin/sendmail -t adminsys@smile.ci

@@ -1,0 +1,2 @@
+echo "status dir" | bconsole | awk '{print $1}' > /tmp/cancel_job_id.txt
+for i in `cat /tmp/cancel_job_id.txt`; do echo "cancel JobId=$i"| bconsole;done

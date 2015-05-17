@@ -1,0 +1,32 @@
+http://stackoverflow.com/questions/19664893/linux-shell-script-for-database-backup
+
+#### script for dump
+#!/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+DATE="$(date +'%d_%m_%Y_%H_%M_%S')"
+FILENAME="glpi_backup_$DATE"_.gz
+path="/usr/src/"
+BACKUPDIR="glpi"
+FULLDUMPDIRECTORY="$path$BACKUPDIR/$FILENAME"
+LOGFILE="$path$BACKUPDIR/dump_glpi_$DATE.log"
+ADMINS="email"
+USER="root"
+PASSWD="root"
+DB="glpidb"
+### test d'existance du dossier de sauvegarde#####
+if [ ! -d $path$BACKUPDIR ]
+then
+   echo "$path$BACKUPDIR not exists"
+   /bin/mkdir "$path$BACKUPDIR"
+   echo "$path$BACKUPDIR has been create"
+fi
+
+### start dump###
+echo "mysqldump started at $DATE " >> "$LOGFILE"
+mysqldump --user=$USER --password=$PASSWD --default-character-set=utf8 glpidb | zip > "$FULLDUMPDIRECTORY"
+echo "mysqldump finish at $DATE " >> "$LOGFILE"
+
+### envoie de mail aux administrateurs
+echo "envoie de mail"
+(echo "subject:backup on $DATE";\
+echo -e "\r\n backup ok ") | sendmail -t $ADMINS

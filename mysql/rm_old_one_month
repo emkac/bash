@@ -1,0 +1,17 @@
+#!/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+BACKUPDIR="/usr/src/glpi"
+ADMINS="email"
+DATE="$(date +'%d_%m_%Y_%H_%M_%S')"
+echo " find old backup more than one month to remove"
+echo "subject: list of old dump" > /tmp/oldbackup.txt
+find "$BACKUPDIR" -name glpi_backup* -mtime +30 >> /tmp/oldbackup.txt
+find "$BACKUPDIR" -name glpi_backup* -mtime +30 -exec rm {} \;
+echo " end deleted"
+
+#### send mail to admin###
+echo "send mail"
+(echo "subject:delete of old dump on $DATE";\
+echo -e "\r\n deleted OK") | sendmail -t $ADMINS
+sendmail $ADMINS < /tmp/oldbackup.txt
+

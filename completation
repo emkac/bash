@@ -1,0 +1,12 @@
+apt-get install bash-completion
+
+2. Add it to the bash profile
+
+vi  /etc/profile  
+a ajouter  a la fin du fichier
+if [ -f /etc/bash_completion ]; then
+ . /etc/bash_completion
+fi
+
+ensuite 
+source /etc/profile
